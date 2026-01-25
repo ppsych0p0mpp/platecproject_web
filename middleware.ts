@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     '/register',
     '/api/auth/login',
     '/api/auth/register',
-    '/api/student/auth/login',  // Student mobile login
+    '/api/student/auth/login',
   ];
   
   // Check if the current path is public
@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
   // If trying to access protected routes without token
   if (!token && !isPublicRoute && !isStudentApi) {
     if (isProtectedApi) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
     return NextResponse.redirect(new URL('/login', request.url));
   }
@@ -51,6 +51,12 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.svg$).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
