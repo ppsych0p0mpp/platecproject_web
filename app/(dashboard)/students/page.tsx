@@ -45,7 +45,6 @@ const initialFormData = {
   course: '',
   year: '1',
   section: '',
-  contactNumber: '',
 };
 
 export default function StudentsPage() {
@@ -137,7 +136,6 @@ export default function StudentsPage() {
       course: student.course,
       year: student.year.toString(),
       section: student.section,
-      contactNumber: student.contactNumber || '',
     });
     setIsModalOpen(true);
   };
@@ -399,13 +397,6 @@ export default function StudentsPage() {
               required
             />
           </div>
-
-          <Input
-            label="Contact Number (Optional)"
-            placeholder="+63 912 345 6789"
-            value={formData.contactNumber}
-            onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
-          />
 
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="secondary" onClick={() => setIsModalOpen(false)}>
