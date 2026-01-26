@@ -38,10 +38,10 @@ export async function POST(request: NextRequest) {
       marked_by: decoded?.id || null,
     }));
 
-    // Bulk upsert - cast to any to avoid strict type issues with array upsert
+    // Bulk upsert - use composite unique constraint including class_id
     const { data: attendance, error } = await supabase
       .from('attendance')
-      .upsert(upsertData as never[], { onConflict: 'student_id,date' })
+      .upsert(upsertData as never[], { onConflict: 'student_id,date,class_id' })
       .select();
 
     if (error) {

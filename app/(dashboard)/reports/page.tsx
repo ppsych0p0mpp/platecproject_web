@@ -10,6 +10,8 @@ import {
   Badge,
   Select,
 } from '@/components/ui';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface StudentReport {
   student: {
@@ -91,6 +93,68 @@ export default function ReportsPage() {
     return (((present + late) / totalRecords) * 100).toFixed(1);
   };
 
+  const downloadPDF = () => {
+    if (!data) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(40);
+    doc.text('Attendance Report', pageWidth / 2, 20, { align: 'center' });
+
+    // Report info
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    const dateRange = data.type === 'daily'
+      ? formatDate(data.dateRange.startDate)
+      : `${formatDate(data.dateRange.startDate)} - ${formatDate(data.dateRange.endDate)}`;
+    doc.text(`Report Type: ${data.type.charAt(0).toUpperCase() + data.type.slice(1)}`, 14, 35);
+    doc.text(`Period: ${dateRange}`, 14, 42);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 49);
+
+    // Summary stats
+    doc.setFontSize(12);
+    doc.setTextColor(40);
+    doc.text('Summary', 14, 62);
+    doc.setFontSize(10);
+    doc.setTextColor(80);
+    doc.text(`Attendance Rate: ${calculateAttendanceRate()}%`, 14, 70);
+    doc.text(`Present: ${data.stats.present} | Absent: ${data.stats.absent} | Late: ${data.stats.late}`, 14, 77);
+
+    // Student table
+    if (data.report && data.report.length > 0) {
+      const tableData = data.report.map((item) => {
+        const rate = item.summary.total > 0
+          ? (((item.summary.present + item.summary.late) / item.summary.total) * 100).toFixed(0)
+          : '0';
+        return [
+          item.student.name,
+          item.student.studentId,
+          `${item.student.course} Y${item.student.year}-${item.student.section}`,
+          item.summary.present.toString(),
+          item.summary.absent.toString(),
+          item.summary.late.toString(),
+          `${rate}%`,
+        ];
+      });
+
+      autoTable(doc, {
+        startY: 85,
+        head: [['Student', 'ID', 'Course', 'Present', 'Absent', 'Late', 'Rate']],
+        body: tableData,
+        theme: 'striped',
+        headStyles: { fillColor: [16, 185, 129] },
+        styles: { fontSize: 9 },
+      });
+    }
+
+    // Save
+    const filename = `attendance-${data.type}-${selectedDate}.pdf`;
+    doc.save(filename);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -132,12 +196,18 @@ export default function ReportsPage() {
                 className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
-            <div className="flex items-end">
-              <Button onClick={fetchReport} className="w-full">
+            <div className="flex items-end gap-2">
+              <Button onClick={fetchReport} className="flex-1">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Generate Report
+                Generate
+              </Button>
+              <Button onClick={downloadPDF} variant="secondary" disabled={!data}>
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                PDF
               </Button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Badge } from '@/components/ui';
 
 interface DashboardData {
@@ -20,18 +20,38 @@ interface DashboardData {
   courseDistribution: Array<{ course: string; count: number }>;
 }
 
+interface ClassInfo {
+  id: string;
+  name: string;
+  code: string;
+}
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
+  const [selectedClass, setSelectedClass] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchClasses = async () => {
     try {
-      const res = await fetch('/api/reports/dashboard');
+      const res = await fetch('/api/classes');
+      const result = await res.json();
+      if (result.success) {
+        setClasses(result.classes || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch classes:', err);
+    }
+  };
+
+  const fetchDashboardData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const url = selectedClass
+        ? `/api/reports/dashboard?classId=${selectedClass}`
+        : '/api/reports/dashboard';
+      const res = await fetch(url);
       const result = await res.json();
       if (result.success) {
         setData(result.dashboard);
@@ -44,7 +64,15 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedClass]);
+
+  useEffect(() => {
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   if (isLoading) {
     return (
@@ -132,9 +160,24 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="animate-fade-in">
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-        <p className="text-slate-400 mt-1">Welcome back! Here&apos;s an overview of your attendance system.</p>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-slate-400 mt-1">Welcome back! Here&apos;s an overview of your attendance system.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <label className="text-sm text-slate-400">Filter by class:</label>
+          <select
+            value={selectedClass}
+            onChange={(e) => setSelectedClass(e.target.value)}
+            className="px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">All Classes</option>
+            {classes.map((cls) => (
+              <option key={cls.id} value={cls.id}>{cls.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Stats Grid */}

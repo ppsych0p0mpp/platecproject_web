@@ -1,20 +1,32 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import supabase from '@/lib/db';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const classId = searchParams.get('classId');
     const today = new Date().toISOString().split('T')[0];
 
-    // Get total students count
-    const { count: totalStudents } = await supabase
-      .from('students')
-      .select('*', { count: 'exact', head: true });
+    // Get total students count (filtered by class if provided)
+    let studentCountQuery = supabase.from('students').select('*', { count: 'exact', head: true });
+    if (classId) {
+      const { data: enrolledStudents } = await supabase
+        .from('class_enrollments')
+        .select('student_id')
+        .eq('class_id', classId);
+      const enrolledIds = enrolledStudents?.map(e => e.student_id) || [];
+      if (enrolledIds.length > 0) {
+        studentCountQuery = studentCountQuery.in('id', enrolledIds);
+      }
+    }
+    const { count: totalStudents } = await studentCountQuery;
 
-    // Get today's attendance
-    const { data: todayAttendance } = await supabase
-      .from('attendance')
-      .select('status')
-      .eq('date', today);
+    // Get today's attendance (filtered by class if provided)
+    let todayQuery = supabase.from('attendance').select('status').eq('date', today);
+    if (classId) {
+      todayQuery = todayQuery.eq('class_id', classId);
+    }
+    const { data: todayAttendance } = await todayQuery;
 
     const todayStats = {
       present: todayAttendance?.filter((a) => a.status === 'present').length || 0,
@@ -28,11 +40,15 @@ export async function GET() {
     weekStart.setDate(weekStart.getDate() - 6);
     const weekStartStr = weekStart.toISOString().split('T')[0];
 
-    const { data: weeklyAttendance } = await supabase
+    let weeklyQuery = supabase
       .from('attendance')
       .select('date, status')
       .gte('date', weekStartStr)
       .lte('date', today);
+    if (classId) {
+      weeklyQuery = weeklyQuery.eq('class_id', classId);
+    }
+    const { data: weeklyAttendance } = await weeklyQuery;
 
     // Group by date
     const weeklyTrend: Record<string, { present: number; absent: number; late: number }> = {};
@@ -50,7 +66,7 @@ export async function GET() {
     });
 
     // Get recent activity (last 10 attendance records)
-    const { data: recentActivity } = await supabase
+    let activityQuery = supabase
       .from('attendance')
       .select(`
         id, date, status, created_at,
@@ -58,6 +74,10 @@ export async function GET() {
       `)
       .order('created_at', { ascending: false })
       .limit(10);
+    if (classId) {
+      activityQuery = activityQuery.eq('class_id', classId);
+    }
+    const { data: recentActivity } = await activityQuery;
 
     const transformedActivity = recentActivity?.map((record) => ({
       id: record.id,

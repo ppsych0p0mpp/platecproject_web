@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upsert attendance record
+    // Upsert attendance record - uses composite unique (student_id, date, class_id)
     const { data: attendance, error } = await supabase
       .from('attendance')
       .upsert(
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
           class_id: classId || null,
           marked_by: decoded?.id || null,
         } as never,
-        { onConflict: 'student_id,date' }
+        { onConflict: 'student_id,date,class_id' }
       )
       .select()
       .single();

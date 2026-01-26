@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Input, Card } from '@/components/ui';
 
+const SPECIAL_CHAR_REGEX = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
 export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -14,11 +16,33 @@ export default function RegisterPage() {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const validatePassword = (password: string) => {
+    if (!SPECIAL_CHAR_REGEX.test(password)) {
+      return 'Password must contain at least one special character (!@#$%^&*...)';
+    }
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return '';
+  };
+
+  const handlePasswordChange = (password: string) => {
+    setFormData({ ...formData, password });
+    setPasswordError(validatePassword(password));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const pwdError = validatePassword(formData.password);
+    if (pwdError) {
+      setPasswordError(pwdError);
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -93,14 +117,19 @@ export default function RegisterPage() {
             required
           />
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-          />
+          <div>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="••••••••"
+              value={formData.password}
+              onChange={(e) => handlePasswordChange(e.target.value)}
+              required
+            />
+            {passwordError && (
+              <p className="mt-1 text-sm text-amber-400">{passwordError}</p>
+            )}
+          </div>
 
           <Input
             label="Confirm Password"
@@ -116,6 +145,7 @@ export default function RegisterPage() {
             className="w-full"
             size="lg"
             isLoading={isLoading}
+            disabled={!!passwordError || !formData.password}
           >
             Create Account
           </Button>

@@ -48,8 +48,14 @@ export default function ClassesPage() {
     name: '',
     description: '',
     subject: '',
-    schedule: '',
+    dayPattern: '',
+    timeRange: '',
   });
+
+  const scheduleOptions = {
+    MWF: ['7:00–9:00 AM', '9:30–11:30 AM'],
+    TTH: ['7:00–9:30 AM', '10:00–11:00 AM'],
+  };
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const fetchClasses = useCallback(async () => {
@@ -75,10 +81,19 @@ export default function ClassesPage() {
     setIsSubmitting(true);
 
     try {
+      const schedule = formData.dayPattern && formData.timeRange
+        ? `${formData.dayPattern} ${formData.timeRange}`
+        : null;
+      
       const res = await fetch('/api/classes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          description: formData.description,
+          subject: formData.subject,
+          schedule,
+        }),
       });
 
       const data = await res.json();
@@ -86,7 +101,7 @@ export default function ClassesPage() {
       if (data.success) {
         setMessage({ type: 'success', text: `Class created! Code: ${data.class.code}` });
         setIsModalOpen(false);
-        setFormData({ name: '', description: '', subject: '', schedule: '' });
+        setFormData({ name: '', description: '', subject: '', dayPattern: '', timeRange: '' });
         fetchClasses();
       } else {
         setMessage({ type: 'error', text: data.error });
@@ -308,12 +323,34 @@ export default function ClassesPage() {
             value={formData.subject}
             onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           />
-          <Input
-            label="Schedule"
-            placeholder="e.g., Mon/Wed/Fri 9:00 AM"
-            value={formData.schedule}
-            onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
-          />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Days</label>
+              <select
+                className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                value={formData.dayPattern}
+                onChange={(e) => setFormData({ ...formData, dayPattern: e.target.value, timeRange: '' })}
+              >
+                <option value="">Select days</option>
+                <option value="MWF">MWF (Mon/Wed/Fri)</option>
+                <option value="TTH">TTH (Tue/Thu)</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Time</label>
+              <select
+                className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50"
+                value={formData.timeRange}
+                onChange={(e) => setFormData({ ...formData, timeRange: e.target.value })}
+                disabled={!formData.dayPattern}
+              >
+                <option value="">Select time</option>
+                {formData.dayPattern && scheduleOptions[formData.dayPattern as keyof typeof scheduleOptions]?.map((time) => (
+                  <option key={time} value={time}>{time}</option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">Description</label>
             <textarea
