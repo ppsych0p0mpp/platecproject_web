@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #ededed;
+  --background: #FCFCFC;
+  --foreground: #1F2933;
+  --primary: #0054A3;
+  --text-secondary: #6B7280;
 }
 
 body {
@@ -33,13 +35,13 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(16, 185, 129, 0.3);
-  color: #fff;
+  background: rgba(0, 84, 163, 0.12);
+  color: var(--foreground);
 }
 
 /* Focus visible */
 *:focus-visible {
-  outline: 2px solid #10b981;
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 

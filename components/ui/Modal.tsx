@@ -52,15 +52,15 @@ export default function Modal({
 
       {/* Modal */}
       <div
-        className={`relative ${sizes[size]} w-full mx-4 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl`}
+        className={`relative ${sizes[size]} w-full mx-4 bg-white border border-slate-200 rounded-2xl shadow-2xl`}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-            <h2 className="text-xl font-bold text-white">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">{title}</h2>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white transition-colors"
+              className="text-slate-500 hover:text-[var(--primary)] transition-colors"
             >
               <svg
                 className="w-6 h-6"

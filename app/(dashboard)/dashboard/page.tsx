@@ -162,15 +162,15 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-slate-400 mt-1">Welcome back! Here&apos;s an overview of your attendance system.</p>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Dashboard</h1>
+          <p className="text-[var(--text-secondary)] mt-1">Welcome back! Here&apos;s an overview of your attendance system.</p>
         </div>
         <div className="flex items-center gap-3">
-          <label className="text-sm text-slate-400">Filter by class:</label>
+          <label className="text-sm text-[var(--text-secondary)]">Filter by class:</label>
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           >
             <option value="">All Classes</option>
             {classes.map((cls) => (
@@ -191,8 +191,8 @@ export default function DashboardPage() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">{stat.title}</p>
-                <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
+                <p className="text-[var(--text-secondary)] text-sm font-medium">{stat.title}</p>
+                <p className="text-3xl font-bold text-[var(--foreground)] mt-1">{stat.value}</p>
               </div>
               <div className={`p-3 rounded-xl ${stat.bgColor}`}>
                 <div className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>
@@ -230,15 +230,15 @@ export default function DashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-white font-semibold w-12 text-right">
+                  <span className="text-[var(--foreground)] font-semibold w-12 text-right">
                     {weeklyTotals.present}
                   </span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Absent</span>
+                <span className="text-[var(--text-secondary)]">Absent</span>
                 <div className="flex items-center gap-3">
-                  <div className="w-48 h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-48 h-2 bg-slate-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-rose-500 to-red-600 rounded-full"
                       style={{
@@ -252,15 +252,15 @@ export default function DashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-white font-semibold w-12 text-right">
+                  <span className="text-[var(--foreground)] font-semibold w-12 text-right">
                     {weeklyTotals.absent}
                   </span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Late</span>
+                <span className="text-[var(--text-secondary)]">Late</span>
                 <div className="flex items-center gap-3">
-                  <div className="w-48 h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-48 h-2 bg-slate-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-amber-500 to-orange-600 rounded-full"
                       style={{
@@ -274,7 +274,7 @@ export default function DashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-white font-semibold w-12 text-right">
+                  <span className="text-[var(--foreground)] font-semibold w-12 text-right">
                     {weeklyTotals.late}
                   </span>
                 </div>
@@ -293,14 +293,14 @@ export default function DashboardPage() {
               {data?.courseDistribution?.map((item) => (
                 <div
                   key={item.course}
-                  className="text-center p-4 rounded-xl bg-slate-800/50 border border-slate-700"
+                  className="text-center p-4 rounded-xl bg-slate-100 border border-slate-200"
                 >
-                  <p className="text-2xl font-bold text-white">{item.count}</p>
-                  <p className="text-sm text-slate-400 mt-1">{item.course}</p>
+                  <p className="text-2xl font-bold text-[var(--foreground)]">{item.count}</p>
+                  <p className="text-sm text-[var(--text-secondary)] mt-1">{item.course}</p>
                 </div>
               ))}
               {(!data?.courseDistribution || data.courseDistribution.length === 0) && (
-                <p className="text-slate-500 col-span-2 text-center py-4">No courses found</p>
+                <p className="text-[var(--text-secondary)] col-span-2 text-center py-4">No courses found</p>
               )}
             </div>
           </CardContent>
@@ -318,15 +318,15 @@ export default function DashboardPage() {
               {data.recentActivity.map((record) => (
                 <div
                   key={record.id}
-                  className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700"
+                  className="flex items-center justify-between p-4 rounded-xl bg-slate-100 border border-slate-200"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold">
                       {record.student?.name?.charAt(0) || '?'}
                     </div>
                     <div>
-                      <p className="font-medium text-white">{record.student?.name || 'Unknown'}</p>
-                      <p className="text-sm text-slate-400">
+                      <p className="font-medium text-[var(--foreground)]">{record.student?.name || 'Unknown'}</p>
+                      <p className="text-sm text-[var(--text-secondary)]">
                         {record.student?.student_id || '-'}
                       </p>
                     </div>
@@ -343,7 +343,7 @@ export default function DashboardPage() {
                     >
                       {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
                     </Badge>
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-[var(--text-secondary)]">
                       {new Date(record.date).toLocaleDateString()}
                     </span>
                   </div>
@@ -351,7 +351,7 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-500 py-8">No recent activity</p>
+            <p className="text-center text-[var(--text-secondary)] py-8">No recent activity</p>
           )}
         </CardContent>
       </Card>

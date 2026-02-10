@@ -168,8 +168,8 @@ export default function ReportsPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-white">Attendance Reports</h1>
-          <p className="text-slate-400 mt-1">Generate and view attendance reports</p>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Attendance Reports</h1>
+          <p className="text-[var(--text-secondary)] mt-1">Generate and view attendance reports</p>
         </div>
       </div>
 
@@ -188,7 +188,7 @@ export default function ReportsPage() {
               ]}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Date</label>
+              <label className="block text-sm font-medium text-black mb-2">Date</label>
               <input
                 type="date"
                 value={selectedDate}
@@ -224,8 +224,8 @@ export default function ReportsPage() {
                   <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <span className="text-slate-400">Report Period:</span>
-                  <span className="text-white font-medium">
+                  <span className="text-black">Report Period:</span>
+                  <span className="text-black font-medium">
                     {formatDate(data.dateRange.startDate)}
                     {data.type !== 'daily' && ` - ${formatDate(data.dateRange.endDate)}`}
                   </span>
@@ -284,13 +284,13 @@ export default function ReportsPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-700">
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Student</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">ID</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Course</th>
-                        <th className="text-center py-3 px-4 text-slate-400 font-medium">Present</th>
-                        <th className="text-center py-3 px-4 text-slate-400 font-medium">Absent</th>
-                        <th className="text-center py-3 px-4 text-slate-400 font-medium">Late</th>
-                        <th className="text-center py-3 px-4 text-slate-400 font-medium">Rate</th>
+                        <th className="text-left py-3 px-4 text-black font-medium">Student</th>
+                        <th className="text-left py-3 px-4 text-black font-medium">ID</th>
+                        <th className="text-left py-3 px-4 text-black font-medium">Course</th>
+                        <th className="text-center py-3 px-4 text-black font-medium">Present</th>
+                        <th className="text-center py-3 px-4 text-black font-medium">Absent</th>
+                        <th className="text-center py-3 px-4 text-black font-medium">Late</th>
+                        <th className="text-center py-3 px-4 text-black font-medium">Rate</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -305,15 +305,15 @@ export default function ReportsPage() {
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white text-sm font-bold">
                                   {item.student.name.charAt(0)}
                                 </div>
-                                <span className="text-white">{item.student.name}</span>
+                                <span className="text-black">{item.student.name}</span>
                               </div>
                             </td>
                             <td className="py-3 px-4">
-                              <code className="px-2 py-1 bg-slate-800 rounded text-emerald-400 text-sm">
+                              <code className="px-2 py-1 bg-slate-800 rounded text-slate-200 text-sm">
                                 {item.student.studentId}
                               </code>
                             </td>
-                            <td className="py-3 px-4 text-slate-300">
+                            <td className="py-3 px-4 text-black">
                               {item.student.course} Year {item.student.year}-{item.student.section}
                             </td>
                             <td className="py-3 px-4 text-center">

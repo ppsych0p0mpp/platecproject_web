@@ -12,13 +12,13 @@ export default function Card({
   ...props
 }: CardProps) {
   const variants = {
-    default: 'bg-slate-900/50 border border-slate-800',
-    gradient: 'bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700',
+    default: 'bg-white border border-slate-200',
+    gradient: 'bg-white border border-slate-200',
   };
 
   return (
     <div
-      className={`rounded-2xl p-6 backdrop-blur-sm ${variants[variant]} ${className}`}
+      className={`rounded-2xl p-6 ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -48,7 +48,7 @@ export function CardTitle({
   className?: string;
 }) {
   return (
-    <h3 className={`text-xl font-bold text-white ${className}`}>
+    <h3 className={`text-xl font-bold text-[var(--foreground)] ${className}`}>
       {children}
     </h3>
   );

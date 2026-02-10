@@ -158,7 +158,11 @@ export default function StudentsPage() {
 
   const openCreateModal = () => {
     setEditingStudent(null);
-    setFormData(initialFormData);
+    const gen = () => {
+      const num = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+      return `26-${num}`;
+    };
+    setFormData({ ...initialFormData, studentId: gen() });
     setFormError('');
     setIsModalOpen(true);
   };
@@ -168,8 +172,8 @@ export default function StudentsPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-white">Students</h1>
-          <p className="text-slate-400 mt-1">Manage student accounts and information</p>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Students</h1>
+          <p className="text-slate-500 mt-1">Manage student accounts and information</p>
         </div>
         <Button onClick={openCreateModal}>
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,13 +245,13 @@ export default function StudentsPage() {
                             {student.name.charAt(0)}
                           </div>
                           <div>
-                            <p className="font-medium text-white">{student.name}</p>
+                            <p className="font-medium text-[var(--foreground)]">{student.name}</p>
                             <p className="text-sm text-slate-500">{student.email}</p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <code className="px-2 py-1 bg-slate-800 rounded text-emerald-400 text-sm">
+                        <code className="px-2 py-1 bg-slate-100 rounded text-emerald-600 text-sm">
                           {student.student_id}
                         </code>
                       </TableCell>
@@ -264,7 +268,7 @@ export default function StudentsPage() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleEdit(student)}
-                            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                            className="p-2 text-slate-600 hover:text-[var(--primary)] hover:bg-slate-100 rounded-lg transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -334,11 +338,11 @@ export default function StudentsPage() {
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Student ID"
-              placeholder="STU-001"
+              placeholder="26-12345"
               value={formData.studentId}
               onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
               required
-              disabled={!!editingStudent}
+              disabled={true}
             />
             <Input
               label="Full Name"

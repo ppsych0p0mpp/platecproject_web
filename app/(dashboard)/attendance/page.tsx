@@ -215,8 +215,8 @@ export default function AttendancePage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-white">Mark Attendance</h1>
-          <p className="text-slate-400 mt-1">
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Mark Attendance</h1>
+          <p className="text-[var(--text-secondary)] mt-1">
             {selectedClass ? `${selectedClass.name} • ${selectedClass.code}` : 'Select a class'}
           </p>
         </div>
@@ -299,7 +299,7 @@ export default function AttendancePage() {
         <CardContent>
           {isLoadingStudents ? (
             <div className="flex items-center justify-center h-32">
-              <div className="w-6 h-6 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"  />
             </div>
           ) : students.length > 0 ? (
             <div className="space-y-3">
@@ -319,7 +319,7 @@ export default function AttendancePage() {
                       </div>
                       <div>
                         <p className="font-medium text-white">{student.name}</p>
-                        <p className="text-sm text-slate-500">
+                        <p className="text-sm text-white">
                           {student.student_id} • {student.course} Year {student.year}-{student.section}
                         </p>
                       </div>

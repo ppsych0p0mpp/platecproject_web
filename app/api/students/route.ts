@@ -55,31 +55,50 @@ export async function GET(request: NextRequest) {
 // POST create new student
 export async function POST(request: NextRequest) {
   try {
-    const { studentId, name, email, password, course, year, section } = await request.json();
+    const { name, email, password, course, year, section } = await request.json();
 
-    // Validate input
-    if (!studentId || !name || !email || !password || !course || !year || !section) {
+    // Validate input (student ID is generated server-side)
+    if (!name || !email || !password || !course || !year || !section) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    // Check for existing student
-    const { data: existingStudent } = await supabase
+    // Ensure email uniqueness
+    const { data: existingByEmail } = await supabase
       .from('students')
       .select('id')
-      .or(`email.eq.${email},student_id.eq.${studentId}`)
+      .eq('email', email)
       .single();
 
-    if (existingStudent) {
+    if (existingByEmail) {
       return NextResponse.json(
-        { error: 'Student ID or email already exists' },
+        { error: 'Email already exists' },
         { status: 400 }
       );
+    }
+
+    // Generate a unique student ID in the format 26-##### (5 digits)
+    const generateId = () => {
+      const num = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+      return `26-${num}`;
+    };
+
+    let studentId = generateId();
+    // Ensure uniqueness (retry a few times if collision)
+    for (let i = 0; i < 5; i++) {
+      const { data: exists } = await supabase
+        .from('students')
+        .select('id')
+        .eq('student_id', studentId)
+        .single();
+
+      if (!exists) break;
+      studentId = generateId();
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create student
+    // Create student (use generated studentId)
     const { data: student, error } = await supabase
       .from('students')
       .insert({

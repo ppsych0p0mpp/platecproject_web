@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
+    <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-slate-200">
       <div className="flex items-center justify-between h-full px-6">
         {/* Search */}
         <div className="flex-1 max-w-md">
@@ -43,7 +43,7 @@ export default function Header() {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-white border border-slate-200 text-[var(--foreground)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent transition-all"
             />
           </div>
         </div>
@@ -51,7 +51,7 @@ export default function Header() {
         {/* Actions */}
         <div className="flex items-center gap-4">
           {/* Notifications */}
-          <button className="relative p-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all">
+          <button className="relative p-2 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-[#0054A3] transition-all">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"

@@ -179,8 +179,8 @@ export default function ClassesPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-white">Classes</h1>
-          <p className="text-slate-400 mt-1">Create and manage your classes</p>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Classes</h1>
+          <p className="text-[var(--text-secondary)] mt-1">Create and manage your classes</p>
         </div>
         <Button onClick={() => setIsModalOpen(true)}>
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,7 +221,7 @@ export default function ClassesPage() {
             <CardHeader className="flex flex-row items-start justify-between">
               <div>
                 <CardTitle className="text-lg">{cls.name}</CardTitle>
-                <p className="text-slate-400 text-sm mt-1">{cls.subject || 'No subject'}</p>
+                <p className="text-black text-sm mt-1">{cls.subject || 'No subject'}</p>
               </div>
               <Badge variant={cls.is_active ? 'success' : 'danger'}>
                 {cls.is_active ? 'Active' : 'Inactive'}
@@ -229,9 +229,9 @@ export default function ClassesPage() {
             </CardHeader>
             <CardContent>
               {/* Class Code */}
-              <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl mb-4">
+              <div className="flex items-center justify-between p-3 bg-white rounded-xl mb-4 border border-slate-800">
                 <div>
-                  <p className="text-xs text-slate-500 uppercase tracking-wide">Join Code</p>
+                  <p className="text-xs text-black  uppercase tracking-wide">Join Code</p>
                   <p className="text-2xl font-mono font-bold text-emerald-400 tracking-widest">
                     {cls.code}
                   </p>
@@ -245,12 +245,12 @@ export default function ClassesPage() {
 
               {/* Description */}
               {cls.description && (
-                <p className="text-slate-400 text-sm mb-4 line-clamp-2">{cls.description}</p>
+                <p className="text-black text-sm mb-4 line-clamp-2">{cls.description}</p>
               )}
 
               {/* Schedule */}
               {cls.schedule && (
-                <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
+                <div className="flex items-center gap-2 text-sm text-black mb-4">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -261,11 +261,11 @@ export default function ClassesPage() {
               {/* Stats */}
               <div className="flex items-center justify-between py-3 border-t border-slate-700">
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
-                  <span className="text-white font-medium">{cls.studentCount}</span>
-                  <span className="text-slate-500">students</span>
+                  <span className="text-black font-medium">{cls.studentCount}</span>
+                  <span className="text-black">Students</span>
                 </div>
                 <Button variant="ghost" size="sm" onClick={() => viewStudents(cls)}>
                   View
