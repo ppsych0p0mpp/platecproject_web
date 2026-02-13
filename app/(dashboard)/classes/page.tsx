@@ -383,15 +383,15 @@ export default function ClassesPage() {
             classStudents.map((student) => (
               <div
                 key={student.id}
-                className="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl"
+                className="flex items-center justify-between p-3 bg-white rounded-xl"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold">
                     {student.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white font-medium">{student.name}</p>
-                    <p className="text-sm text-slate-500">{student.student_id} • {student.course}</p>
+                    <p className="text-black font-medium">{student.name}</p>
+                    <p className="text-sm text-slate-600">{student.student_id} • {student.course}</p>
                   </div>
                 </div>
               </div>
@@ -400,8 +400,8 @@ export default function ClassesPage() {
             <p className="text-center text-slate-500 py-8">No students enrolled yet</p>
           )}
         </div>
-        <div className="mt-4 p-3 bg-slate-800/50 rounded-xl">
-          <p className="text-sm text-slate-400">
+        <div className="mt-4 p-3 bg-white rounded-xl">
+          <p className="text-sm text-slate-500">
             Share this code with students to join:
             <span className="ml-2 font-mono font-bold text-emerald-400 text-lg">
               {selectedClass?.code}
